@@ -15,8 +15,8 @@ sample_ids = samples(randi(length(samples),Ndata,1));
 data = rand(Ndata,1);
 
 % sci_bar labels follows the order of the data
-group_ids(1:4) = groups;
-sample_ids(1:5) = samples;
+group_ids(1:length(groups)) = groups;
+sample_ids(1:length(samples)) = samples;
 
 %% Make bar plot with sci_bar
 h = sci_bar(data, group_ids, sample_ids, true, 'Ingredients', 'Level');
@@ -24,4 +24,3 @@ h.plot
 
 % touch-up
 set(gca, 'Position', [0.097 0.12 0.65 0.8])
-xlim([0.5 4.5])

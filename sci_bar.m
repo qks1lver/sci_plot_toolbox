@@ -43,7 +43,12 @@ classdef sci_bar
                 obj.Ngroups = 1;
                 fprintf('Just 1 group, eh mate!\n');
             else
-                obj.groupIDs = groupIDs;
+                [i,~] = size(groupIDs);
+                if i == 1
+                    obj.groupIDs = groupIDs';
+                else
+                    obj.groupIDs = groupIDs;
+                end
                 obj.groups = unique(groupIDs,'stable');
                 obj.Ngroups = length(obj.groups);
             end
@@ -55,7 +60,12 @@ classdef sci_bar
                 obj.Nsamples = 1;
                 fprintf('All the same stuff, yea?!\n');
             else
-                obj.sampleIDs = sampleIDs;
+                [i,~] = size(sampleIDs);
+                if i == 1
+                    obj.sampleIDs = sampleIDs';
+                else
+                    obj.sampleIDs = sampleIDs;
+                end
                 obj.samples = unique(sampleIDs,'stable');
                 obj.Nsamples = length(obj.samples);
             end
@@ -109,18 +119,7 @@ classdef sci_bar
             
             set(0,'DefaultAxesFontName', 'Times New Roman')
             
-            % plot bars
-            if obj.Ngroups > 1 && obj.Nsamples > 1
-                c = linspace(0.4, 1, obj.Nsamples)';
-                colormap([c c c])
-                bar(obj.stat.mean,'LineWidth',0.5,'EdgeColor','k');
-                legend(obj.samples,'box','off')
-            else
-                bar(obj.stat.mean,0.5,'LineWidth',0.5,'FaceColor',[0.75 0.75 0.75],'EdgeColor','k');
-            end
-            box off
-            
-            % calculate x-coordinates for error bars
+            % calculate x-coordinates for bars/error bars
             if obj.Ngroups == 1
                 groupwidth = min(0.8, obj.Nsamples/(obj.Nsamples+1.5));
                 x(1:obj.Nsamples,1) = (1:obj.Nsamples) - groupwidth/2 + 1 * groupwidth / 2;
@@ -134,6 +133,17 @@ classdef sci_bar
                 end
                 xticklabel = obj.groups;
             end
+            
+            % plot bars
+            if obj.Ngroups > 1 && obj.Nsamples > 1
+                c = linspace(0.4, 1, obj.Nsamples)';
+                colormap([c c c])
+                bar(obj.stat.mean,'LineWidth',0.5,'EdgeColor','k');
+                legend(obj.samples,'box','off')
+            else
+                bar(x,obj.stat.mean,0.5,'LineWidth',0.5,'FaceColor',[0.75 0.75 0.75],'EdgeColor','k');
+            end
+            box off
             
             % plot error bars
             hold on
